@@ -32,6 +32,16 @@ kubectl port-forward service/cockroachdb-public 26257
 
 1. Turn everything off with `minikube stop` or `minikube delete`.
 
+1. Build client
+```bash
+docker build -t go-client .  
+```
+
+1. Run client 
+```bash 
+docker run -d -p 8080:8080 go-client
+```
+
 ## Troubleshoot 
 Dirty database version: open SQL terminal and run 
 ```sql
