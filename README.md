@@ -32,14 +32,9 @@ kubectl port-forward service/cockroachdb-public 26257
 
 1. Turn everything off with `minikube stop` or `minikube delete`.
 
-1. Build client
-```bash
-docker build -t go-client .  
-```
-
-1. Run client 
+1. Run client & server
 ```bash 
-docker run -d -p 8080:8080 go-client
+docker-compose up
 ```
 
 ## Troubleshoot 

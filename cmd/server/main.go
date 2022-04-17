@@ -2,7 +2,10 @@ package main
 
 import (
 	"log"
+	"net/http"
+	"time"
 
+	"github.com/addetz/totally-real-multi-cloud-payments/handlers"
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/cockroachdb"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
@@ -13,8 +16,27 @@ const (
 )
 
 func main() {
-	log.Print("Welcome to the totally real multi-cloud payments engine!")
+	timeout := 5 * time.Second
+	srv := &http.Server{
+		Handler:      handlers.NewServerRouter(),
+		Addr:         ":4000",
+		ReadTimeout:  timeout,
+		WriteTimeout: timeout,
+	}
 
+	// Start Server
+	go func() {
+		log.Println("Starting server...")
+		if err := srv.ListenAndServe(); err != nil {
+			log.Fatal(err)
+		}
+	}()
+
+	// Graceful Shutdown
+	handlers.Shutdown(srv)
+}
+
+func runMigrate() {
 	// run the migration
 	m, err := migrate.New(
 		"file://db/migrations",

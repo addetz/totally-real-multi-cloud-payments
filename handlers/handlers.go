@@ -1,27 +1,14 @@
 package handlers
 
 import (
+	"context"
 	"log"
 	"net/http"
-
-	"github.com/gorilla/mux"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 )
-
-func New() *mux.Router{
-	// Create Server and Route Handlers
-	r := mux.NewRouter()
-
-	r.HandleFunc("/", Root)
-	r.HandleFunc("/health", Health)
-	r.HandleFunc("/readiness", Readiness)
-
-	return r
-}
-
-func Root(w http.ResponseWriter, r *http.Request) {
-	log.Printf("Received request for root handler\n")
-	w.Write([]byte("Welcome to the totally real multi-cloud payments engine!"))
-}
 
 func Health(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
@@ -29,4 +16,20 @@ func Health(w http.ResponseWriter, r *http.Request) {
 
 func Readiness(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
+}
+
+func Shutdown(srv *http.Server) {
+	interruptChan := make(chan os.Signal, 1)
+	signal.Notify(interruptChan, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+
+	// Block until we receive our signal.
+	<-interruptChan
+
+	// Create a deadline to wait for.
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	srv.Shutdown(ctx)
+
+	log.Println("Shutting down")
+	os.Exit(0)
 }
