@@ -38,7 +38,7 @@ spec:
 apiVersion: v1
 kind: Service                    # Type of kubernetes resource
 metadata:
-  name: totally-real-multi-cloud-payments-client-service   # Name of the resource
+  name: totally-real-multi-cloud-payments-client  # Name of the resource
 spec:
   type: NodePort                 # A port is opened on each node in your cluster via Kube proxy.
   ports:                         # Take incoming HTTP requests on port 9090 and forward them to the targetPort of 8080
@@ -47,3 +47,24 @@ spec:
     targetPort: 8080
   selector:
     app: totally-real-multi-cloud-payments-client
+
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: totally-real-multi-cloud-payments-client
+  labels:
+    app: totally-real-multi-cloud-payments-client
+spec:
+  rules:
+    - host: hello-world.info
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: totally-real-multi-cloud-payments-client
+                port:
+                  number: 8080

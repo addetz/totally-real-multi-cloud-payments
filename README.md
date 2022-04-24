@@ -41,6 +41,7 @@ Enter at your own peril. 🙈
     ```bash
     kubectl apply -f k8s
     kubectl port-forward service/totally-real-multi-cloud-payments-client-service 8080:8080
+    kubectl port-forward service/nats 4222:4222
     kubectl get deployments
     kubectl get pods
     ```
@@ -76,4 +77,5 @@ drop table schema_migrations;
 ## Resources
 - [Deploying a containerized Go app on Kubernetes](https://www.callicoder.com/deploy-containerized-go-app-kubernetes/)
 - [Deploy a Local Cluster with Kubernetes](https://www.cockroachlabs.com/docs/stable/orchestrate-a-local-cluster-with-kubernetes.html)
+- [Networking in Kubernetes](https://kubebyexample.com/en/learning-paths/application-development-kubernetes/lesson-3-networking-kubernetes)
 
