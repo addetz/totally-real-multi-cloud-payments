@@ -14,6 +14,7 @@ func NewClientRouter() *mux.Router{
 	r.HandleFunc("/", RootClient)
 	r.HandleFunc("/health", Health)
 	r.HandleFunc("/readiness", Readiness)
+	r.HandleFunc("/payment", NewPayment)
 
 	return r
 }
@@ -22,4 +23,5 @@ func RootClient(w http.ResponseWriter, r *http.Request) {
 	log.Println("Received request for root client handler")
 	w.Write([]byte("Welcome to the totally real multi-cloud payments client!"))
 }
+
 

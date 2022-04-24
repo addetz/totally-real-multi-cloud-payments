@@ -39,8 +39,8 @@ Enter at your own peril. 🙈
 
 1. Run client & server with Kubernetes
     ```bash
-    kubectl apply -f ./k8s/client-deployment.yml
-    kubectl apply -f ./k8s/server-deployment.yml
+    kubectl apply -f k8s
+    kubectl port-forward service/totally-real-multi-cloud-payments-client-service 8080:8080
     kubectl get deployments
     kubectl get pods
     ```
